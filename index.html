@@ -122,7 +122,7 @@
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 3px;
-    font-size: 0.98rem;
+    font-size: 1.5rem;
     margin: 40px 0 26px;
   }
   .mods{
@@ -138,7 +138,7 @@
     min-height: 390px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     transition: transform 0.2s ease, border-color 0.2s ease;
   }
   .mod-card.featured{
@@ -181,16 +181,17 @@
     border-color: var(--accent);
   }
   .mod-title{
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight:600;
     color: var(--text);
     margin: 0 0 6px;
     display:flex;
-    align-items:center;
-    gap:10px;
+    flex-direction: column;
+    align-items:flex-start;
+    gap:6px;
   }
   .mod-tag{
-    font-size:0.68rem;
+    font-size:0.9rem;
     background: rgba(201,70,75,0.18);
     color: var(--accent-soft);
     padding: 3px 10px;
@@ -198,10 +199,24 @@
     font-weight:500;
     white-space:nowrap;
   }
+  .mod-tags-row{
+    display:flex;
+    flex-direction:row;
+    gap:8px;
+  }
   .mod-desc{
     color: var(--text-dim);
     font-size: 0.95rem;
     margin: 6px 0 14px;
+  }
+  .mod-desc + .mod-desc{
+    margin-top: -8px;
+  }
+  .mod-meta{
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    opacity: 0.75;
+    margin: 0 0 4px;
   }
   .mod-progress-stats{
     display: flex;
@@ -294,7 +309,7 @@
   <h1>มือแปลรับจ้าง</h1>
   <div class="subtitle">รวบรวมผลงานม็อดแปลไทยและอัปเดตความคืบหน้า</div>
   <a class="fb-link" href="https://www.facebook.com/MPRJKana/" target="_blank" rel="noopener">
-    📘 ไปที่หน้าเพจ Facebook
+    ไปที่หน้าเพจ Facebook
   </a>
 </header>
 
@@ -304,35 +319,43 @@
   <div class="mods">
 
     <div class="mod-card featured chill">
-      <div class="mod-title">Chill with You: Lo-fi Story <span class="mod-tag">ซับไทย</span></div>
-      <div class="mod-desc">แปลซับไทย พร้อมทำเสียงพากย์ภาษาไทย — อัปเดตล่าสุดดูได้ที่โพสต์ปักหมุดในเพจ</div>
-      <a class="mod-link" href="https://www.facebook.com/MPRJKana/" target="_blank" rel="noopener">ดูรายละเอียด / ดาวน์โหลด →</a>
+      <div class="mod-title"><span class="mod-tags-row"><span class="mod-tag">ซับไทย</span><span class="mod-tag">Nexusmods</span></span>Chill with You: Lo-fi Story</div>
+      <div class="mod-meta">Version 1.17.2 / Last update 19 Sep 2026</div>
+      <div class="mod-desc">แปลซับไทยในส่วนเนื้อเรื่องและ UI</div>
+      <a class="mod-link" href="https://www.facebook.com/share/p/19ntNVAHuq/" target="_blank" rel="noopener">ดูรายละเอียด / ดาวน์โหลด →</a>
+      <a class="mod-link" href="https://www.nexusmods.com/chillwithyoulofistory/mods/11" target="_blank" rel="noopener" style="display:block; margin-top:6px;">ดาวน์โหลดทาง Nexusmods →</a>
     </div>
 
     <div class="mod-card featured spirit">
-      <div class="mod-title">Spirit City: Lofi Sessions <span class="mod-tag">ซับไทย</span></div>
-      <div class="mod-desc">รวมทุกภาคเสริมจนถึง Lo-fi Girl — อัปเดตล่าสุดดูได้ที่โพสต์ปักหมุดในเพจ</div>
-      <a class="mod-link" href="https://www.facebook.com/share/p/19FV3Qg6n3/" target="_blank" rel="noopener">ดูรายละเอียด / ดาวน์โหลด →</a>
+      <div class="mod-title"><span class="mod-tags-row"><span class="mod-tag">ซับไทย</span><span class="mod-tag">Nexusmods</span></span>Spirit City: Lofi Sessions</div>
+      <div class="mod-meta">Version 2.5.1 / Last update 21 Sep 2026</div>
+      <div class="mod-desc">แปล UI และเนื้อเรื่อง Spirit ทั้งหมด</div>
+      <a class="mod-link" href="https://www.facebook.com/share/p/19snehyxZm/" target="_blank" rel="noopener">ดูรายละเอียด / ดาวน์โหลด →</a>
+      <a class="mod-link" href="https://www.nexusmods.com/spiritcitylofisessions/mods/18" target="_blank" rel="noopener" style="display:block; margin-top:6px;">ดาวน์โหลดทาง Nexusmods →</a>
     </div>
 
     <div class="mod-card featured lm">
-      <div class="mod-title">Little Misfortune <span class="mod-tag">ซับไทย</span></div>
+      <div class="mod-title"><span class="mod-tags-row"><span class="mod-tag">ซับไทย</span><span class="mod-tag">Collab</span></span>Little Misfortune</div>
+      <div class="mod-meta">Version 1.0 / Last update 11 Dec 2024</div>
       <div class="mod-desc">แปลเฉพาะซับไตเติล ไม่รวมข้อความในสมุดภาพ</div>
+      <div class="mod-desc">แปลโดยมือแปลรับจ้าง ทำไฟล์โดยอาบะป้ง และ ว่างๆก็หาเกมมาแปล</div>
       <a class="mod-link" href="https://www.facebook.com/share/p/17ciVqQX3g/" target="_blank" rel="noopener">ดูรายละเอียด / ดาวน์โหลด →</a>
     </div>
 
     <div class="mod-card featured pcbs2">
-      <div class="mod-title">PC Building Simulator 2 <span class="mod-tag">ซับไทย</span></div>
+      <div class="mod-title"><span class="mod-tags-row"><span class="mod-tag">ซับไทย</span><span class="mod-tag">Collab</span><span class="mod-tag">Nexusmods</span></span>PC Building Simulator 2</div>
+      <div class="mod-meta">Version 1.10 / Last update 19 Aug 2026</div>
       <div class="mod-desc">แปลซับไตเติล และข้อความที่แสดงในเกม</div>
-      <a class="mod-link" href="https://www.facebook.com/MPRJKana/" target="_blank" rel="noopener">ดูรายละเอียด / ดาวน์โหลด →</a>
+      <div class="mod-desc">แปลโดยมือแปลรับจ้าง, ไม่พร้อมไม่แจก, ว่างๆก็หาเกมมาแปล</div>
+      <a class="mod-link" href="https://www.nexusmods.com/pcbuildingsimulator2/mods/94" target="_blank" rel="noopener">ดาวน์โหลดทาง Nexusmods →</a>
     </div>
-
   </div>
 
   <div class="section-label">ความคืบหน้าม็อดที่แปลอยู่</div>
   <div class="mods">
     <div class="mod-card featured pragmata">
-      <div class="mod-title">Pragmata <span class="mod-tag">ซับไทย</span></div>
+      <div class="mod-title"><span class="mod-tags-row"><span class="mod-tag">ซับไทย</span><span class="mod-tag">Collab</span><span class="mod-tag">อาบะเรนเจอร์</span></span>Pragmata</div>
+      <div class="mod-meta">Version 0 (in progress) / Last update 4 Sep 2026</div>
       <div class="mod-desc">แปลซับไตเติล และข้อความที่แสดงในเกม</div>
       <div class="mod-progress-stats">
         <span>ความคืบหน้า <b>74.18%</b> <span class="delta">(+3.36%)</span></span>
@@ -341,7 +364,7 @@
       <div class="mod-progress-bar">
         <div class="mod-progress-fill" style="width:74.18%;"></div>
       </div>
-      <a class="mod-link" href="https://www.facebook.com/MPRJKana/" target="_blank" rel="noopener">ดูรายละเอียด / ดาวน์โหลด →</a>
+      <a class="mod-link" href="https://www.facebook.com/share/p/1DNUyofB97/" target="_blank" rel="noopener">ดูความคืบหน้าล่าสุด →</a>
     </div>
   </div>
 
@@ -349,14 +372,14 @@
   <div class="mods">
     <div class="mod-card" style="min-height:auto; text-align:right;">
       <div class="mod-desc" style="margin-bottom:14px;">งานแปลทุกเกมในที่นี้แจกฟรี เปิดรับโดเนทเฉพาะงานพากย์เพื่อเป็นค่าจ้างทีมงานเท่านั้น</div>
-      <a class="fb-link" href="https://ganknow.com/mprjkana" target="_blank" rel="noopener" style="align-self:flex-end;">💛 Donate สนับสนุน</a>
+      <a class="fb-link" href="https://ganknow.com/mprjkana" target="_blank" rel="noopener" style="align-self:flex-end;">Donate สนับสนุน</a>
     </div>
   </div>
 </main>
 
 <footer>
   <div class="note">
-    ⚠️ ระวังการแอบอ้างเรียกรับผลประโยชน์รูปแบบอื่นทุกกรณี — ทุกเกมในที่นี้เป็นการแปลเพื่อแจกฟรี
+    ระวังการแอบอ้างเรียกรับผลประโยชน์รูปแบบอื่นทุกกรณี — ทุกเกมในที่นี้เป็นการแปลเพื่อแจกฟรี
   </div>
 </footer>
 
