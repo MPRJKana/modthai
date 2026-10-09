@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Little Misfortune — มือแปลรับจ้าง</title>
+<style>
+  :root{
+    --bg: #1a0f12;
+    --bg-soft: #23151a;
+    --card: #2c161b;
+    --text: #f5e9ea;
+    --text-dim: #c8a3a6;
+    --accent: #c9464b;
+    --accent-soft: #e28a8d;
+    --line: #40222799;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: 'Segoe UI', 'Noto Sans Thai', -apple-system, sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, #191720 100%);
+    color: var(--text);
+    line-height:1.6;
+  }
+  a{ color: inherit; }
+  .wrap{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+  @media (min-width: 760px){
+    .wrap{ max-width: 860px; }
+  }
+
+  /* ---- top nav ---- */
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color: var(--text-dim);
+    text-decoration:none;
+    font-size:0.9rem;
+    margin: 18px 0 8px;
+  }
+  .back-link:hover{ color: var(--accent-soft); }
+
+  /* ---- hero ---- */
+  .hero{
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    margin-top: 10px;
+    aspect-ratio: 1100 / 586;
+    min-height: 220px;
+  }
+  .hero img{
+    width:100%; height:100%;
+    object-fit: cover;
+    object-position: right top;
+    display:block;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(0deg, rgba(26,15,18,0.92) 0%, rgba(26,15,18,0.35) 55%, rgba(26,15,18,0.05) 100%);
+  }
+  .hero-content{
+    position:absolute; left:0; right:0; bottom:0;
+    padding: 24px 26px;
+    z-index:2;
+  }
+  .tags-row{ display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .tag{
+    font-size:0.78rem;
+    background: rgba(201,70,75,0.22);
+    color: var(--accent-soft);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight:600;
+  }
+  .hero h1{
+    margin:0 0 8px;
+    font-size: clamp(1.7rem, 5vw, 2.3rem);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  }
+  .meta-line{
+    font-size:0.88rem;
+    color: var(--text-dim);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+
+  /* ---- description ---- */
+  .desc-block{
+    margin: 26px 0;
+    font-size: 1rem;
+    color: var(--text);
+  }
+  .desc-block p{ margin: 0 0 12px; }
+  .desc-block p:last-child{ margin-bottom:0; }
+
+  /* ---- screenshot gallery ---- */
+  .gallery-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 22px 0 30px;
+  }
+  .gallery-thumb{
+    position: relative;
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    background: var(--card);
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    outline-offset: 2px;
+  }
+  .gallery-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s ease;
+  }
+  .gallery-thumb:hover img{ transform: scale(1.06); }
+  .gallery-thumb::after{
+    content: "🔍";
+    position: absolute;
+    right: 8px; bottom: 8px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(26,15,18,0.65);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .gallery-thumb:hover::after{ opacity: 1; }
+
+  .lightbox{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 5, 7, 0.92);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .lightbox.open{ display: flex; }
+  .lightbox img{
+    max-width: min(1100px, 92vw);
+    max-height: 82vh;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  }
+  .lightbox-close{
+    position: absolute;
+    top: 18px; right: 22px;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 1.3rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .lightbox-nav{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 1.4rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .lightbox-prev{ left: 16px; }
+  .lightbox-next{ right: 16px; }
+  .lightbox-counter{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    background: rgba(26,15,18,0.6);
+    padding: 5px 14px;
+    border-radius: 14px;
+  }
+
+  /* ---- download cta ---- */
+  .download-box{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    justify-content:space-between;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin: 26px 0;
+  }
+  .download-box .label{
+    font-size:0.95rem;
+    color: var(--text-dim);
+  }
+  .btn-download{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:48px;
+    background: var(--accent);
+    color:#fff;
+    text-decoration:none;
+    font-weight:700;
+    font-size:1.02rem;
+    padding: 10px 28px;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .btn-download:hover{ background:#dc5a5f; }
+  .btn-download:active{ transform: scale(0.97); }
+
+  /* ---- section label ---- */
+  .section-label{
+    font-size:1.3rem;
+    font-weight:700;
+    color: var(--text);
+    margin: 36px 0 18px;
+    padding-bottom:10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* ---- install steps ---- */
+  .steps{ display:flex; flex-direction:column; gap:14px; }
+  .step{
+    display:flex;
+    gap:16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .step-num{
+    flex-shrink:0;
+    width:34px; height:34px;
+    border-radius:50%;
+    background: var(--accent);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+    font-size:1rem;
+  }
+  .step-body h3{
+    margin:2px 0 6px;
+    font-size:1.02rem;
+    color: var(--text);
+  }
+  .step-body p{
+    margin:0 0 12px;
+    font-size:0.92rem;
+    color: var(--text-dim);
+    line-height:1.7;
+  }
+  .step-body p:last-of-type{ margin-bottom:0; }
+  .step-img{
+    display:block;
+    width:100%;
+    max-width:560px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    margin-top:10px;
+  }
+
+  /* ---- note ---- */
+  .note-box{
+    margin-top: 30px;
+    font-size:0.82rem;
+    color: var(--text-dim);
+    line-height:1.8;
+    opacity:0.85;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+
+  .placeholder-flag{
+    display:inline-block;
+    margin-top:14px;
+    font-size:0.75rem;
+    color: var(--accent-soft);
+    background: rgba(201,70,75,0.12);
+    border: 1px dashed var(--accent-soft);
+    border-radius: 10px;
+    padding: 8px 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <a class="back-link" href="https://mprjkana.github.io/modthai/">← กลับไปหน้าแรก</a>
+
+  <div class="hero">
+    <img src="images/card-lm.jpg" alt="Little Misfortune">
+    <div class="hero-content">
+      <div class="tags-row">
+        <span class="tag">ซับไทย</span>
+        <span class="tag">Collab</span>
+      </div>
+      <h1>Little Misfortune</h1>
+      <div class="meta-line">Version 1.0 / Last update 30 Jun 2025</div>
+    </div>
+  </div>
+
+  <div class="desc-block">
+    <p>แปลซับไตเติลภาษาไทยสำหรับเกม Little Misfortune ทั้งเกม เฉพาะส่วนซับไตเติลเท่านั้น (ไม่รวมข้อความในสมุดภาพ)</p>
+    <p>ทำไฟล์โดยอาบะป้ง และ ว่างๆก็หาเกมมาแปล</p>
+  </div>
+
+  <div class="section-label" style="margin-top:4px;">ภาพตัวอย่างในเกม</div>
+  <div class="gallery-grid" id="gallery">
+    <button class="gallery-thumb" data-index="0"><img src="images/gallery/shot1-thumb.jpg" alt="ภาพตัวอย่าง 1"></button>
+    <button class="gallery-thumb" data-index="1"><img src="images/gallery/shot2-thumb.jpg" alt="ภาพตัวอย่าง 2"></button>
+    <button class="gallery-thumb" data-index="2"><img src="images/gallery/shot3-thumb.jpg" alt="ภาพตัวอย่าง 3"></button>
+    <button class="gallery-thumb" data-index="3"><img src="images/gallery/shot4-thumb.jpg" alt="ภาพตัวอย่าง 4"></button>
+    <button class="gallery-thumb" data-index="4"><img src="images/gallery/shot5-thumb.jpg" alt="ภาพตัวอย่าง 5"></button>
+    <button class="gallery-thumb" data-index="5"><img src="images/gallery/shot6-thumb.jpg" alt="ภาพตัวอย่าง 6"></button>
+  </div>
+
+  <div class="download-box">
+    <div class="label">ดาวน์โหลดทาง MediaFire (86.63 MB)</div>
+    <a class="btn-download" href="https://www.mediafire.com/file/bfgauwl4k0rhml4/resources.assets/file" target="_blank" rel="noopener">ดาวน์โหลด →</a>
+  </div>
+
+  <div class="section-label">วิธีติดตั้ง</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>ดาวน์โหลดไฟล์จาก MediaFire</h3>
+        <p>กดปุ่ม DOWNLOAD (86.63MB) เพื่อดาวน์โหลดไฟล์ resources.assets</p>
+        <img class="step-img" src="images/steps/step1.png" alt="หน้าดาวน์โหลดจาก MediaFire">
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>ไปที่โฟลเดอร์ติดตั้งเกม</h3>
+        <p>เปิดไปที่ SteamLibrary &gt; steamapps &gt; common &gt; Little Misfortune &gt; Little Misfortune_Data</p>
+        <img class="step-img" src="images/steps/step2.png" alt="โฟลเดอร์ติดตั้งเกม Little Misfortune_Data">
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>แทนที่ไฟล์ resources.assets</h3>
+        <p>คัดลอกไฟล์ที่ดาวน์โหลดมาวางทับไฟล์เดิม แล้วเลือก "Replace the file in the destination"</p>
+        <img class="step-img" src="images/steps/step3.png" alt="หน้าต่างยืนยันแทนที่ไฟล์">
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>เปลี่ยนภาษาในเกม</h3>
+        <p>เข้าเกม ไปที่ Options แล้วเปลี่ยน Language จาก ENGLISH เป็น THAI</p>
+        <img class="step-img" src="images/steps/step4.png" alt="เมนูตั้งค่าเปลี่ยนภาษาเป็นไทย">
+      </div>
+    </div>
+  </div>
+
+  <div class="note-box">
+    งานแปลทุกเกมในที่นี้แจกฟรี เปิดรับโดเนทเฉพาะงานพากย์เพื่อเป็นค่าจ้างทีมงานเท่านั้น<br>
+    ระวังการแอบอ้างเรียกรับผลประโยชน์รูปแบบอื่นทุกกรณี — ทุกเกมในที่นี้เป็นการแปลเพื่อแจกฟรี
+  </div>
+
+  <a class="back-link" href="https://mprjkana.github.io/modthai/" style="margin-top:28px;">← กลับไปหน้าแรก</a>
+
+</div>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-close" id="lb-close">✕</div>
+    <div class="lightbox-nav lightbox-prev" id="lb-prev">‹</div>
+    <img id="lb-img" src="" alt="ภาพตัวอย่างขนาดเต็ม">
+    <div class="lightbox-nav lightbox-next" id="lb-next">›</div>
+    <div class="lightbox-counter" id="lb-counter"></div>
+  </div>
+
+  <script>
+  (function(){
+    var fulls = [
+      'images/gallery/shot1-full.jpg',
+      'images/gallery/shot2-full.jpg',
+      'images/gallery/shot3-full.jpg',
+      'images/gallery/shot4-full.jpg',
+      'images/gallery/shot5-full.jpg',
+      'images/gallery/shot6-full.jpg'
+    ];
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lb-img');
+    var lbCounter = document.getElementById('lb-counter');
+    var current = 0;
+
+    function show(i){
+      current = (i + fulls.length) % fulls.length;
+      lbImg.src = fulls[current];
+      lbCounter.textContent = (current + 1) + ' / ' + fulls.length;
+    }
+    function open(i){
+      show(i);
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function close(){
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.gallery-thumb').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        open(parseInt(btn.getAttribute('data-index'), 10));
+      });
+    });
+    document.getElementById('lb-close').addEventListener('click', close);
+    document.getElementById('lb-prev').addEventListener('click', function(){ show(current - 1); });
+    document.getElementById('lb-next').addEventListener('click', function(){ show(current + 1); });
+    lb.addEventListener('click', function(e){ if (e.target === lb) close(); });
+    document.addEventListener('keydown', function(e){
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+  })();
+  </script>
+
+</body>
+</html>
