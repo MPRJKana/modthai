@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pragmata — มือแปลรับจ้าง</title>
+<style>
+  :root{
+    --bg: #1a0f12;
+    --bg-soft: #23151a;
+    --card: #2c161b;
+    --text: #f5e9ea;
+    --text-dim: #c8a3a6;
+    --accent: #c9464b;
+    --accent-soft: #e28a8d;
+    --line: #40222799;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: 'Segoe UI', 'Noto Sans Thai', -apple-system, sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, #191720 100%);
+    color: var(--text);
+    line-height:1.6;
+  }
+  a{ color: inherit; }
+  .wrap{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+  @media (min-width: 760px){
+    .wrap{ max-width: 860px; }
+  }
+
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color: var(--text-dim);
+    text-decoration:none;
+    font-size:0.9rem;
+    margin: 18px 0 8px;
+  }
+  .back-link:hover{ color: var(--accent-soft); }
+
+  /* ---- hero ---- */
+  .hero{
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    margin-top: 10px;
+    aspect-ratio: 1100 / 586;
+    min-height: 220px;
+  }
+  .hero img{
+    width:100%; height:100%;
+    object-fit: cover;
+    object-position: right top;
+    display:block;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(0deg, rgba(26,15,18,0.92) 0%, rgba(26,15,18,0.35) 55%, rgba(26,15,18,0.05) 100%);
+  }
+  .hero-content{
+    position:absolute; left:0; right:0; bottom:0;
+    padding: 24px 26px;
+    z-index:2;
+  }
+  .tags-row{ display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .tag{
+    font-size:0.78rem;
+    background: rgba(201,70,75,0.22);
+    color: var(--accent-soft);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight:600;
+  }
+  .hero h1{
+    margin:0 0 8px;
+    font-size: clamp(1.7rem, 5vw, 2.3rem);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  }
+  .meta-line{
+    font-size:0.88rem;
+    color: var(--text-dim);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+
+  /* ---- description ---- */
+  .desc-block{
+    margin: 26px 0;
+    font-size: 1rem;
+    color: var(--text);
+  }
+  .desc-block p{ margin: 0 0 12px; }
+  .desc-block p:last-child{ margin-bottom:0; }
+
+  .status-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin: 18px 0 30px;
+    font-size:0.92rem;
+    color: var(--text-dim);
+  }
+  .status-dot{
+    width:10px; height:10px;
+    border-radius:50%;
+    background: var(--accent-soft);
+    flex-shrink:0;
+    box-shadow: 0 0 0 4px rgba(226,138,141,0.18);
+  }
+  .status-box b{ color: var(--text); }
+
+  /* ---- section label ---- */
+  .section-label{
+    font-size:1.3rem;
+    font-weight:700;
+    color: var(--text);
+    margin: 36px 0 18px;
+    padding-bottom:10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* ---- screenshot gallery ---- */
+  .gallery-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 22px 0 30px;
+  }
+  .gallery-thumb{
+    position: relative;
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    background: var(--card);
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    outline-offset: 2px;
+  }
+  .gallery-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s ease;
+  }
+  .gallery-thumb:hover img{ transform: scale(1.06); }
+  .gallery-thumb::after{
+    content: "🔍";
+    position: absolute;
+    right: 8px; bottom: 8px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(26,15,18,0.65);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .gallery-thumb:hover::after{ opacity: 1; }
+
+  .lightbox{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 5, 7, 0.92);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .lightbox.open{ display: flex; }
+  .lightbox img{
+    max-width: min(1100px, 92vw);
+    max-height: 82vh;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  }
+  .lightbox-close{
+    position: absolute;
+    top: 18px; right: 22px;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 1.3rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .lightbox-nav{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 1.4rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .lightbox-prev{ left: 16px; }
+  .lightbox-next{ right: 16px; }
+  .lightbox-counter{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    background: rgba(26,15,18,0.6);
+    padding: 5px 14px;
+    border-radius: 14px;
+  }
+
+  /* ---- follow cta ---- */
+  .follow-box{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    justify-content:space-between;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin: 30px 0;
+  }
+  .follow-box .label{
+    font-size:0.95rem;
+    color: var(--text-dim);
+  }
+  .btn-follow{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:48px;
+    background: var(--accent);
+    color:#fff;
+    text-decoration:none;
+    font-weight:700;
+    font-size:1.02rem;
+    padding: 10px 28px;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .btn-follow:hover{ background:#dc5a5f; }
+  .btn-follow:active{ transform: scale(0.97); }
+
+  .note-box{
+    margin-top: 30px;
+    font-size:0.82rem;
+    color: var(--text-dim);
+    line-height:1.8;
+    opacity:0.85;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+
+  /* ---- progress ---- */
+  .delta{ color: var(--accent-soft); font-size:0.85em; font-weight:500; }
+  .delta:empty{ display:none; }
+  .delta.review{ color:#9cc3ef; }
+  .stat-bar{
+    position:relative;
+    width:100%;
+    height:10px;
+    background: rgba(201,70,75,0.4);
+    border: 1px solid rgba(201,70,75,0.6);
+    border-radius: 20px;
+    overflow:hidden;
+  }
+  .stat-fill, .stat-fill-delta{
+    position:absolute; top:0; height:100%;
+    transition: width 1.1s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .stat-fill{ left:0; background:#ffffff; border-radius: 20px 0 0 20px; }
+  .stat-fill-delta{ background: var(--accent-soft); border-radius: 0 20px 20px 0; transition-delay:0.4s; }
+  .stat-bar.review{ background: rgba(70,130,201,0.4); border-color: rgba(70,130,201,0.6); }
+  .stat-bar.review .stat-fill{ background:#3f7fd1; }
+  .stat-bar.review .stat-fill-delta{ background:#9cc3ef; }
+  @media (prefers-reduced-motion: reduce){
+    .stat-fill, .stat-fill-delta{ transition:none; }
+  }
+  .num{ font-variant-numeric: tabular-nums; }
+
+  .overall{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 24px;
+    display:flex;
+    flex-direction:column;
+    gap: 22px;
+  }
+  .overall-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+  }
+  .overall-label{ font-size:1.2rem; font-weight:600; color: var(--text); }
+  .overall-pct{ font-size: clamp(1.15rem, 4vw, 1.4rem); font-weight:700; color: var(--text); line-height:1.1; }
+  .overall-lines{ font-size:0.88rem; color: var(--text-dim); margin-top:10px; }
+  .overall-lines b{ color: var(--text); font-weight:600; }
+  .overall-lines .remain{ display:inline-block; margin-top:8px; font-size: clamp(1.3rem, 5vw, 1.75rem); line-height:1.25; color: var(--text); }
+  .overall-lines .remain b{ font-weight:700; }
+
+  .cat-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  @media (min-width: 760px){
+    .cat-grid{ grid-template-columns: repeat(3, 1fr); }
+  }
+  .cat-tile{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .cat-head{ display:flex; align-items:center; gap:10px; margin-bottom:6px; min-height:30px; }
+  .cat-icon{
+    flex-shrink:0;
+    width:26px; height:26px;
+    background-color: var(--accent-soft);
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;
+  }
+  .cat-icon[hidden]{ display:none; }
+  .cat-name{ font-size:1.3rem; color: var(--text); font-weight:600; line-height:1.2; }
+  .cat-desc{ font-size:0.78rem; color: var(--text-dim); line-height:1.5; margin: 0 0 12px; opacity:0.9; }
+  @media (min-width: 760px){ .cat-desc{ min-height: 3em; } }
+  .cat-pct{ font-size:1.7rem; font-weight:700; color: var(--text); margin-bottom:10px; }
+  .cat-note{ font-size:0.8rem; color: var(--text-dim); margin-top:10px; line-height:1.6; }
+  .cat-note b{ color: var(--text); font-weight:600; }
+  .cat-note .cat-remain{ display:inline-block; margin-top:4px; font-size:1.1rem; line-height:1.3; color: var(--text); }
+  .cat-note .cat-remain b{ font-weight:700; }
+  .gallery-item{ margin:0; }
+  .gallery-item .gallery-thumb{ width:100%; }
+  .gallery-item figcaption{ font-size:0.85rem; color: var(--text-dim); margin-top:8px; }
+  @media (min-width: 760px){
+    .gallery-grid{ grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* ---- history chart ---- */
+  .section-label .range{ font-size:0.85rem; font-weight:400; color: var(--text-dim); margin-left:6px; }
+  .history{ background: var(--card); border: 1px solid var(--line); border-radius:16px; padding: 20px 20px 16px; }
+  .history[hidden]{ display:none; }
+  .history-sub{ font-size:0.9rem; color: var(--text-dim); margin: 0 0 12px; }
+  .history-sub b{ color: var(--text); font-weight:600; }
+  .history-sub2{ margin-top: 22px; }
+  .history-chart{ width:100%; }
+  .history-chart svg{ display:block; width:100%; height:auto; overflow:visible; }
+  .history-chart text{ font-family: inherit; fill: var(--text-dim); font-size:12px; }
+  .history-chart .h-grid{ stroke: rgba(200,163,166,0.18); stroke-width:1; }
+  .history-chart .h-line{ fill:none; stroke:#ffffff; stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; }
+  .history-chart .h-area{ fill: rgba(226,138,141,0.14); }
+  .history-chart .h-line.review{ stroke:#3f7fd1; }
+  .history-chart .h-area.review{ fill: rgba(63,127,209,0.18); }
+  .history-chart .h-dot.review{ fill:#9cc3ef; }
+  .history-chart .h-dot.review.now{ fill:#3f7fd1; stroke:#ffffff; }
+  .history-chart .h-now.review{ fill:#9cc3ef; }
+  .history-chart .h-break{ stroke: var(--text-dim); stroke-width:1.6; stroke-linecap:round; }
+  .history-chart .h-gap{ fill: var(--text-dim); font-size:12px; font-style:italic; }
+  .history-chart .h-dot{ fill:#ffffff; stroke: var(--card); stroke-width:2; }
+  .history-chart .h-dot.now{ fill: var(--accent-soft); stroke:#ffffff; stroke-width:2; }
+  .history-chart .h-note{ fill: var(--accent-soft); font-size:12px; font-weight:600; }
+  .history-chart .h-now{ fill: var(--text); font-size:14px; font-weight:700; }
+  .history-foot{ font-size:0.78rem; color: var(--text-dim); opacity:0.85; line-height:1.7; margin-top:10px; }
+  .stat-bar.thin{ height:6px; margin-top:14px; }
+  .cat-note.review{ margin-top:8px; }
+  .cat-note.review .delta{ color:#9cc3ef; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <a class="back-link" href="https://mprjkana.github.io/modthai/">← กลับไปหน้าแรก</a>
+
+  <div class="hero">
+    <img src="images/card-pragmata.jpg" alt="Pragmata">
+    <div class="hero-content">
+      <div class="tags-row">
+        <span class="tag">ซับไทย</span>
+        <span class="tag">Collab</span>
+        <span class="tag">อาบะเรนเจอร์</span>
+      </div>
+      <h1>Pragmata</h1>
+      <div class="meta-line" data-role="meta">อัปเดตล่าสุด 8 Oct 2026</div>
+    </div>
+  </div>
+
+  <div class="desc-block">
+    <p>แปลซับไตเติล และข้อความที่แสดงในเกม เป็นโปรเจกต์ที่ทำร่วมกับเพื่อนๆ ในกลุ่มอาบะเรนเจอร์</p>
+  </div>
+
+  <div class="status-box">
+    <span class="status-dot"></span>
+    <span><b>ยังไม่เปิดให้โหลด</b> — งานแปลนี้จะปล่อยให้โหลดได้ก็ต่อเมื่อแปลเสร็จสมบูรณ์ทั้งเกม</span>
+  </div>
+
+  <div class="section-label">ความคืบหน้าโดยรวม <span class="range" data-role="range" data-for="overall" hidden></span></div>
+  <div class="overall" id="overall">
+    <div>
+      <div class="overall-head">
+        <span class="overall-label">แปลเป็นภาษาไทย</span>
+        <span class="overall-pct num"><span data-role="progress-percent">85.69%</span> <span class="delta" data-role="progress-delta"></span></span>
+      </div>
+      <div class="stat-bar">
+        <div class="stat-fill" data-role="progress-fill" style="width:85.69%;"></div>
+        <div class="stat-fill-delta" data-role="progress-fill-delta" style="left:85.69%; width:0%;"></div>
+      </div>
+      <div class="overall-lines num">เสร็จแล้ว <b data-role="lines">7,066/8,246</b> บรรทัด <span class="delta" data-role="lines-delta"></span><br><span class="remain">เหลืออีก <b data-role="left">1,180</b> บรรทัด</span></div>
+    </div>
+    <div>
+      <div class="overall-head">
+        <span class="overall-label">ตรวจสอบความถูกต้อง</span>
+        <span class="overall-pct num"><span data-role="review-percent">36.05%</span> <span class="delta review" data-role="review-delta"></span></span>
+      </div>
+      <div class="stat-bar review">
+        <div class="stat-fill" data-role="review-fill" style="width:36.05%;"></div>
+        <div class="stat-fill-delta" data-role="review-fill-delta" style="left:36.05%; width:0%;"></div>
+      </div>
+      <div class="overall-lines num">เสร็จแล้ว <b data-role="review-lines">2,973/8,246</b> บรรทัด <span class="delta review" data-role="review-lines-delta"></span><br><span class="remain">เหลืออีก <b data-role="review-left">5,273</b> บรรทัด</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">ความคืบหน้าการแปลแยกหมวด <span class="range" data-role="range" data-for="cats" hidden></span></div>
+  <div class="cat-grid" id="cats">
+    <div class="cat-tile" data-cat="story">
+      <div class="cat-head"><span class="cat-name" data-role="name">เนื้อเรื่อง</span></div>
+      <div class="cat-desc">บทพูดในเชลเตอร์ ในแต่ละด่าน และตอนต่อสู้</div>
+      <div class="cat-pct num"><span data-role="pct">71.72%</span> <span class="delta" data-role="delta"></span></div>
+      <div class="stat-bar">
+        <div class="stat-fill" data-role="fill" style="width:71.72%;"></div>
+        <div class="stat-fill-delta" data-role="fill-delta" style="left:71.72%; width:0%;"></div>
+      </div>
+      <div class="cat-note num">แปลแล้ว <b data-role="lines">2,450/3,416</b> บรรทัด <span class="delta" data-role="lines-delta"></span><br><span class="cat-remain">เหลืออีก <b data-role="left">966</b> บรรทัด</span></div>
+      <div class="stat-bar review thin">
+        <div class="stat-fill" data-role="review-fill" style="width:3.83%;"></div>
+        <div class="stat-fill-delta" data-role="review-fill-delta" style="left:3.83%; width:0%;"></div>
+      </div>
+      <div class="cat-note review num">ตรวจแล้ว <b data-role="review-pct">3.83%</b> <span class="delta review" data-role="review-delta"></span> (<span data-role="review-note-lines">131/3,416</span> บรรทัด)</div>
+    </div>
+    <div class="cat-tile" data-cat="cutscene">
+      <div class="cat-head"><span class="cat-name" data-role="name">คัตซีน</span></div>
+      <div class="cat-desc">บทพูดและคำบรรยายในฉากคัตซีนตลอดเรื่อง</div>
+      <div class="cat-pct num"><span data-role="pct">84.46%</span> <span class="delta" data-role="delta"></span></div>
+      <div class="stat-bar">
+        <div class="stat-fill" data-role="fill" style="width:84.46%;"></div>
+        <div class="stat-fill-delta" data-role="fill-delta" style="left:84.46%; width:0%;"></div>
+      </div>
+      <div class="cat-note num">แปลแล้ว <b data-role="lines">451/534</b> บรรทัด <span class="delta" data-role="lines-delta"></span><br><span class="cat-remain">เหลืออีก <b data-role="left">83</b> บรรทัด</span></div>
+      <div class="stat-bar review thin">
+        <div class="stat-fill" data-role="review-fill" style="width:27.9%;"></div>
+        <div class="stat-fill-delta" data-role="review-fill-delta" style="left:27.9%; width:0%;"></div>
+      </div>
+      <div class="cat-note review num">ตรวจแล้ว <b data-role="review-pct">27.90%</b> <span class="delta review" data-role="review-delta"></span> (<span data-role="review-note-lines">149/534</span> บรรทัด)</div>
+    </div>
+    <div class="cat-tile" data-cat="docs">
+      <div class="cat-head"><span class="cat-name" data-role="name">เอกสาร</span></div>
+      <div class="cat-desc">เอกสารและอีเมลที่เก็บได้ในเกม และข้อมูลศัตรู</div>
+      <div class="cat-pct num"><span data-role="pct">81.14%</span> <span class="delta" data-role="delta"></span></div>
+      <div class="stat-bar">
+        <div class="stat-fill" data-role="fill" style="width:81.14%;"></div>
+        <div class="stat-fill-delta" data-role="fill-delta" style="left:81.14%; width:0%;"></div>
+      </div>
+      <div class="cat-note num">แปลแล้ว <b data-role="lines">284/350</b> บรรทัด <span class="delta" data-role="lines-delta"></span><br><span class="cat-remain">เหลืออีก <b data-role="left">66</b> บรรทัด</span></div>
+      <div class="stat-bar review thin">
+        <div class="stat-fill" data-role="review-fill" style="width:1.71%;"></div>
+        <div class="stat-fill-delta" data-role="review-fill-delta" style="left:1.71%; width:0%;"></div>
+      </div>
+      <div class="cat-note review num">ตรวจแล้ว <b data-role="review-pct">1.71%</b> <span class="delta review" data-role="review-delta"></span> (<span data-role="review-note-lines">6/350</span> บรรทัด)</div>
+    </div>
+    <div class="cat-tile" data-cat="items">
+      <div class="cat-head"><span class="cat-name" data-role="name">ไอเทม</span></div>
+      <div class="cat-desc">ชื่อและคำอธิบายไอเทมต่างๆ</div>
+      <div class="cat-pct num"><span data-role="pct">95.52%</span> <span class="delta" data-role="delta"></span></div>
+      <div class="stat-bar">
+        <div class="stat-fill" data-role="fill" style="width:95.52%;"></div>
+        <div class="stat-fill-delta" data-role="fill-delta" style="left:95.52%; width:0%;"></div>
+      </div>
+      <div class="cat-note num">แปลแล้ว <b data-role="lines">64/67</b> บรรทัด <span class="delta" data-role="lines-delta"></span><br><span class="cat-remain">เหลืออีก <b data-role="left">3</b> บรรทัด</span></div>
+      <div class="stat-bar review thin">
+        <div class="stat-fill" data-role="review-fill" style="width:52.24%;"></div>
+        <div class="stat-fill-delta" data-role="review-fill-delta" style="left:52.24%; width:0%;"></div>
+      </div>
+      <div class="cat-note review num">ตรวจแล้ว <b data-role="review-pct">52.24%</b> <span class="delta review" data-role="review-delta"></span> (<span data-role="review-note-lines">35/67</span> บรรทัด)</div>
+    </div>
+    <div class="cat-tile" data-cat="gear">
+      <div class="cat-head"><span class="cat-name" data-role="name">อุปกรณ์</span></div>
+      <div class="cat-desc">อาวุธ ม็อดและโหนดเสริมพลัง</div>
+      <div class="cat-pct num"><span data-role="pct">92.92%</span> <span class="delta" data-role="delta"></span></div>
+      <div class="stat-bar">
+        <div class="stat-fill" data-role="fill" style="width:92.92%;"></div>
+        <div class="stat-fill-delta" data-role="fill-delta" style="left:92.92%; width:0%;"></div>
+      </div>
+      <div class="cat-note num">แปลแล้ว <b data-role="lines">394/424</b> บรรทัด <span class="delta" data-role="lines-delta"></span><br><span class="cat-remain">เหลืออีก <b data-role="left">30</b> บรรทัด</span></div>
+      <div class="stat-bar review thin">
+        <div class="stat-fill" data-role="review-fill" style="width:12.74%;"></div>
+        <div class="stat-fill-delta" data-role="review-fill-delta" style="left:12.74%; width:0%;"></div>
+      </div>
+      <div class="cat-note review num">ตรวจแล้ว <b data-role="review-pct">12.74%</b> <span class="delta review" data-role="review-delta"></span> (<span data-role="review-note-lines">54/424</span> บรรทัด)</div>
+    </div>
+    <div class="cat-tile" data-cat="ui">
+      <div class="cat-head"><span class="cat-name" data-role="name">UI/ระบบ</span></div>
+      <div class="cat-desc">เมนู การตั้งค่า ภารกิจ ปุ่มควบคุม และข้อความระบบ</div>
+      <div class="cat-pct num"><span data-role="pct">99.07%</span> <span class="delta" data-role="delta"></span></div>
+      <div class="stat-bar">
+        <div class="stat-fill" data-role="fill" style="width:99.07%;"></div>
+        <div class="stat-fill-delta" data-role="fill-delta" style="left:99.07%; width:0%;"></div>
+      </div>
+      <div class="cat-note num">แปลแล้ว <b data-role="lines">3,423/3,455</b> บรรทัด <span class="delta" data-role="lines-delta"></span><br><span class="cat-remain">เหลืออีก <b data-role="left">32</b> บรรทัด</span></div>
+      <div class="stat-bar review thin">
+        <div class="stat-fill" data-role="review-fill" style="width:75.2%;"></div>
+        <div class="stat-fill-delta" data-role="review-fill-delta" style="left:75.2%; width:0%;"></div>
+      </div>
+      <div class="cat-note review num">ตรวจแล้ว <b data-role="review-pct">75.20%</b> <span class="delta review" data-role="review-delta"></span> (<span data-role="review-note-lines">2,598/3,455</span> บรรทัด)</div>
+    </div>
+  </div>
+
+  <div class="section-label">ภาพตัวอย่างในเกม</div>
+  <div class="gallery-grid" id="gallery">
+    <figure class="gallery-item">
+      <button class="gallery-thumb" data-index="0"><img src="images/gallery/pragmata-story-thumb.jpg" alt="ภาพตัวอย่างหมวดเนื้อเรื่อง"></button>
+      <figcaption>เนื้อเรื่อง</figcaption>
+    </figure>
+    <figure class="gallery-item">
+      <button class="gallery-thumb" data-index="1"><img src="images/gallery/pragmata-cutscene-thumb.jpg" alt="ภาพตัวอย่างหมวดคัตซีน"></button>
+      <figcaption>คัตซีน</figcaption>
+    </figure>
+    <figure class="gallery-item">
+      <button class="gallery-thumb" data-index="2"><img src="images/gallery/pragmata-docs-thumb.jpg" alt="ภาพตัวอย่างหมวดเอกสาร"></button>
+      <figcaption>เอกสาร</figcaption>
+    </figure>
+    <figure class="gallery-item">
+      <button class="gallery-thumb" data-index="3"><img src="images/gallery/pragmata-item-thumb.jpg" alt="ภาพตัวอย่างหมวดไอเทม"></button>
+      <figcaption>ไอเทม</figcaption>
+    </figure>
+    <figure class="gallery-item">
+      <button class="gallery-thumb" data-index="4"><img src="images/gallery/pragmata-gear-thumb.jpg" alt="ภาพตัวอย่างหมวดอุปกรณ์"></button>
+      <figcaption>อุปกรณ์</figcaption>
+    </figure>
+    <figure class="gallery-item">
+      <button class="gallery-thumb" data-index="5"><img src="images/gallery/pragmata-ui-thumb.jpg" alt="ภาพตัวอย่างหมวดUI/ระบบ"></button>
+      <figcaption>UI/ระบบ</figcaption>
+    </figure>
+  </div>
+
+  <div class="section-label">ความคืบหน้าย้อนหลัง</div>
+  <div class="history" id="history" hidden>
+    <p class="history-sub"><b>แปลเป็นภาษาไทย</b> จำนวนบรรทัดที่เหลือต้องแปล ยิ่งเส้นต่ำลงยิ่งใกล้เสร็จ (0 = แปลครบ)</p>
+    <div class="history-chart" id="history-chart"></div>
+    <div id="history-review" hidden>
+      <p class="history-sub history-sub2"><b>ตรวจสอบความถูกต้อง</b> จำนวนบรรทัดที่เหลือต้องตรวจสอบ ยิ่งเส้นต่ำลงยิ่งใกล้เสร็จ (0 = ตรวจครบ)</p>
+      <div class="history-chart" id="history-review-chart"></div>
+    </div>
+    <div class="history-foot" id="history-foot">ตัวเลขย้อนหลังเป็นค่าที่จดไว้คร่าวๆ ระหว่างทำงาน</div>
+  </div>
+
+  <div class="follow-box">
+    <div class="label">ติดตามความคืบหน้าล่าสุดได้ที่เพจ Facebook</div>
+    <a class="btn-follow" data-role="link" href="https://www.facebook.com/share/p/1FMFBtQEnw/" target="_blank" rel="noopener">ดูความคืบหน้าล่าสุด →</a>
+  </div>
+
+  <div class="note-box">
+    งานแปลทุกเกมในที่นี้แจกฟรี เปิดรับโดเนทเฉพาะงานพากย์เพื่อเป็นค่าจ้างทีมงานเท่านั้น<br>
+    ระวังการแอบอ้างเรียกรับผลประโยชน์รูปแบบอื่นทุกกรณี — ทุกเกมในที่นี้เป็นการแปลเพื่อแจกฟรี
+  </div>
+
+  <a class="back-link" href="https://mprjkana.github.io/modthai/" style="margin-top:28px;">← กลับไปหน้าแรก</a>
+
+</div>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-close" id="lb-close">✕</div>
+    <div class="lightbox-nav lightbox-prev" id="lb-prev">‹</div>
+    <img id="lb-img" src="" alt="ภาพตัวอย่างขนาดเต็ม">
+    <div class="lightbox-nav lightbox-next" id="lb-next">›</div>
+    <div class="lightbox-counter" id="lb-counter"></div>
+  </div>
+
+<script>
+(function(){
+  var SNAP_URL = 'pragmata-snapshots.csv';
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  /* ---------- csv ---------- */
+  function parseCSV(text){
+    var rows = [], row = [], field = '', inQuotes = false;
+    for (var i = 0; i < text.length; i++){
+      var c = text[i];
+      if (inQuotes){
+        if (c === '"'){ if (text[i+1] === '"'){ field += '"'; i++; } else { inQuotes = false; } }
+        else { field += c; }
+      } else {
+        if (c === '"'){ inQuotes = true; }
+        else if (c === ','){ row.push(field); field = ''; }
+        else if (c === '\r'){ }
+        else if (c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+        else { field += c; }
+      }
+    }
+    if (field.length > 0 || row.length > 0){ row.push(field); rows.push(row); }
+    return rows.filter(function(r){ return r.length > 1 || (r.length === 1 && r[0] !== ''); });
+  }
+  function toObjects(text){
+    var rows = parseCSV(text.replace(/^\uFEFF/, ''));
+    if (rows.length < 2) return [];
+    var header = rows[0].map(function(h){ return h.trim(); });
+    return rows.slice(1).map(function(raw){
+      var o = {};
+      header.forEach(function(h, i){ o[h] = (raw[i] || '').trim(); });
+      return o;
+    });
+  }
+
+  /* ---------- formatting ---------- */
+  function dayMs(iso){
+    var m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(iso);
+    return m ? Date.UTC(+m[1], +m[2]-1, +m[3]) : NaN;
+  }
+  function shortDate(ms){ var d = new Date(ms); return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()]; }
+  function longDate(ms){ var d = new Date(ms); return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+  function n0(v){ var n = Number(v); return isNaN(n) ? v : Math.round(n).toLocaleString('en-US'); }
+  function pc(a, b){ return b ? Math.round(a / b * 10000) / 100 : 0; }
+  function pctText(v){ return v.toFixed(2) + '%'; }
+  function signed(v, digits, suffix){
+    if (!v) return '';
+    return '(' + (v > 0 ? '+' : '') + (digits ? v.toFixed(digits) : v.toLocaleString('en-US')) + (suffix || '') + ')';
+  }
+  function q(root, role){ return root.querySelector('[data-role="' + role + '"]'); }
+
+  /* ---------- snapshots -> numbers ---------- */
+  function normalise(rows){
+    return rows.map(function(r){
+      return { t: dayMs(r.date), id: r.category_id, name: r.category_name, total: Number(r.total_lines),
+               done: Number(r.translated_lines), rev: Number(r.reviewed_lines) || 0, basis: r.basis || '',
+               link: r.link || '', note: r.note || '' };
+    }).filter(function(r){ return !isNaN(r.t) && r.id && !isNaN(r.total) && !isNaN(r.done); })
+      .sort(function(a, b){ return a.t - b.t; });
+  }
+  /* same counting basis: plain difference. Different basis: compare only the lines still
+     to translate (still comparable), and leave the review change out. */
+  function metrics(cur, prev){
+    var m = { total: cur.total, done: cur.done, rev: cur.rev, left: cur.total - cur.done,
+              p: pc(cur.done, cur.total), rp: pc(cur.rev, cur.total),
+              dl: 0, dp: 0, rdl: 0, rdp: 0, prevT: null };
+    if (!prev) return m;
+    m.prevT = prev.t;
+    if (prev.basis === cur.basis){
+      m.dl = cur.done - prev.done;
+      m.dp = Math.round((m.p - pc(prev.done, prev.total)) * 100) / 100;
+      m.rdl = cur.rev - prev.rev;
+      m.rdp = Math.round((m.rp - pc(prev.rev, prev.total)) * 100) / 100;
+    } else {
+      m.dl = (prev.total - prev.done) - (cur.total - cur.done);
+      m.dp = pc(m.dl, cur.total);
+    }
+    return m;
+  }
+
+  /* ---------- bars ---------- */
+  function setBar(fill, fillDelta, p, delta){
+    if (!fill || !fillDelta) return;
+    var d = delta > 0 ? delta : 0;
+    var prev = Math.max(p - d, 0);
+    fillDelta.style.left = prev + '%';
+    if (reduceMotion){
+      fill.style.transition = fillDelta.style.transition = 'none';
+      fill.style.width = prev + '%'; fillDelta.style.width = d + '%';
+      return;
+    }
+    fill.style.width = '0%'; fillDelta.style.width = '0%';
+    void fill.offsetWidth;
+    requestAnimationFrame(function(){ fill.style.width = prev + '%'; fillDelta.style.width = d + '%'; });
+  }
+  function whenVisible(el, fn){
+    if (!el || !('IntersectionObserver' in window)){ fn(); return; }
+    var io = new IntersectionObserver(function(entries){
+      if (entries.some(function(e){ return e.isIntersecting; })){ io.disconnect(); fn(); }
+    }, { threshold: 0.3 });
+    io.observe(el);
+  }
+
+  /* ---------- date ranges next to the section titles ---------- */
+  var ranges = { overall: null, cats: null };
+  function updateRange(){
+    document.querySelectorAll('[data-role="range"]').forEach(function(r){
+      var key = r.getAttribute('data-for');
+      var scope = document.getElementById(key);
+      var any = false;
+      if (scope) scope.querySelectorAll('.delta').forEach(function(e){ if (e.textContent.trim()) any = true; });
+      if (ranges[key] && any){ r.textContent = '(' + ranges[key] + ')'; r.hidden = false; }
+      else { r.hidden = true; }
+    });
+  }
+
+  /* ---------- overall block ---------- */
+  function applyOverall(m, latest, link){
+    var root = document.getElementById('overall');
+    var meta = document.querySelector('[data-role="meta"]');
+    if (meta) meta.textContent = 'อัปเดตล่าสุด ' + longDate(latest.t);
+    var a = document.querySelector('[data-role="link"]');
+    if (a && link) a.href = link;
+
+    q(root,'progress-percent').textContent = pctText(m.p);
+    q(root,'progress-delta').textContent = signed(m.dp, 2, '%');
+    q(root,'lines').textContent = n0(m.done) + '/' + n0(m.total);
+    q(root,'lines-delta').textContent = signed(m.dl, 0);
+    q(root,'left').textContent = n0(m.left);
+    q(root,'review-percent').textContent = pctText(m.rp);
+    q(root,'review-delta').textContent = signed(m.rdp, 2, '%');
+    q(root,'review-lines').textContent = n0(m.rev) + '/' + n0(m.total);
+    q(root,'review-lines-delta').textContent = signed(m.rdl, 0);
+    q(root,'review-left').textContent = n0(m.total - m.rev);
+    if (m.prevT) ranges.overall = shortDate(m.prevT) + ' - ' + shortDate(latest.t);
+    whenVisible(root, function(){
+      setBar(q(root,'progress-fill'), q(root,'progress-fill-delta'), m.p, m.dp);
+      setBar(q(root,'review-fill'), q(root,'review-fill-delta'), m.rp, m.rdp);
+    });
+  }
+
+  /* ---------- category tiles ---------- */
+  function applyCategory(id, name, m, latestT){
+    var tile = document.querySelector('.cat-tile[data-cat="' + id + '"]');
+    if (!tile) return;
+    if (name) q(tile,'name').textContent = name;
+    q(tile,'pct').textContent = pctText(m.p);
+    q(tile,'delta').textContent = signed(m.dp, 2, '%');
+    q(tile,'lines').textContent = n0(m.done) + '/' + n0(m.total);
+    q(tile,'lines-delta').textContent = signed(m.dl, 0);
+    q(tile,'left').textContent = n0(m.left);
+    q(tile,'review-pct').textContent = pctText(m.rp);
+    q(tile,'review-delta').textContent = signed(m.rdp, 2, '%');
+    q(tile,'review-note-lines').textContent = n0(m.rev) + '/' + n0(m.total);
+    if (m.prevT && !ranges.cats) ranges.cats = shortDate(m.prevT) + ' - ' + shortDate(latestT);
+    whenVisible(tile, function(){
+      setBar(q(tile,'fill'), q(tile,'fill-delta'), m.p, m.dp);
+      setBar(q(tile,'review-fill'), q(tile,'review-fill-delta'), m.rp, m.rdp);
+    });
+  }
+
+  /* ---------- history graphs (lines still to do; 0 = finished) ---------- */
+  var DAY = 86400000, GAP_MS = 30 * DAY, GAP_VIS_MS = 18 * DAY;
+  var charts = [];
+  function el(name, attrs, text){
+    var e = document.createElementNS(SVGNS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  /* gaps longer than 30 days are squeezed to about 18 days, marked with // and dated at both ends */
+  function drawChart(box, pts, opt){
+    if (!box || !pts || pts.length < 2) return;
+    var cls = opt.cls ? ' ' + opt.cls : '';
+    var W = Math.max(box.clientWidth, 260);
+    var H = W < 480 ? 230 : 280;
+    var padL = 46, padR = 18, padT = 48, padB = 34;
+    var t0 = pts[0].t, t1 = pts[pts.length-1].t;
+
+    var gaps = [];
+    for (var i = 1; i < pts.length; i++){
+      var dt = pts[i].t - pts[i-1].t;
+      if (dt > GAP_MS) gaps.push({ a: pts[i-1].t, b: pts[i].t, c: dt - GAP_VIS_MS, idx: i, note: pts[i].note });
+    }
+    function vt(t){
+      var v = t - t0;
+      gaps.forEach(function(g){
+        if (t >= g.b) v -= g.c; else if (t > g.a) v -= (t - g.a) * (g.c / (g.b - g.a));
+      });
+      return v;
+    }
+    var span = vt(t1);
+    var maxV = 0; pts.forEach(function(p){ if (p.v > maxV) maxV = p.v; });
+    var step = maxV > 4000 ? 1000 : 500;
+    var yMax = Math.max(Math.ceil(maxV / step) * step, step);
+    function X(t){ return padL + (span === 0 ? 0 : vt(t) / span) * (W - padL - padR); }
+    function Y(v){ return padT + (1 - v / yMax) * (H - padT - padB); }
+    var gapEnd = {}; gaps.forEach(function(g){ gapEnd[g.idx] = true; });
+
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': opt.aria(pts) });
+
+    for (var v = 0; v <= yMax; v += step){
+      svg.appendChild(el('line', { 'class':'h-grid', x1: padL, x2: W - padR, y1: Y(v), y2: Y(v) }));
+      svg.appendChild(el('text', { x: padL - 8, y: Y(v) + 4, 'text-anchor':'end' }, n0(v)));
+    }
+
+    /* x labels: gap-edge dates first, then months that still fit */
+    var labels = [];
+    function addLabel(x, text, force){
+      var ok = force || labels.every(function(l){ return Math.abs(l.x - x) > (l.force ? 64 : 34); });
+      if (ok) labels.push({ x: x, text: text, force: !!force });
+    }
+    gaps.forEach(function(g){ addLabel(X(g.a), shortDate(g.a), true); addLabel(X(g.b), shortDate(g.b), true); });
+    var d0 = new Date(t0), cur = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), 1);
+    if (t1 - t0 <= 45 * DAY){                         /* short history: label the dates themselves */
+      pts.forEach(function(p){ addLabel(X(p.t), shortDate(p.t)); });
+      cur = t1 + 1;
+    } else if (cur < t0) addLabel(X(t0), MONTHS[d0.getUTCMonth()]);
+    while (cur <= t1){
+      var inGap = gaps.some(function(g){ return cur > g.a && cur < g.b; });
+      if (cur >= t0 && !inGap) addLabel(X(cur), MONTHS[new Date(cur).getUTCMonth()]);
+      var nd = new Date(cur); cur = Date.UTC(nd.getUTCFullYear(), nd.getUTCMonth()+1, 1);
+    }
+    labels.forEach(function(l){ svg.appendChild(el('text', { x: l.x, y: H - 8, 'text-anchor':'middle' }, l.text)); });
+
+    /* line + area for each stretch of continuous data */
+    var segs = [], seg = [pts[0]];
+    for (var j = 1; j < pts.length; j++){
+      if (gapEnd[j]){ segs.push(seg); seg = []; }
+      seg.push(pts[j]);
+    }
+    segs.push(seg);
+    segs.forEach(function(sg){
+      if (sg.length > 1){
+        var a = 'M' + X(sg[0].t) + ',' + Y(0);
+        sg.forEach(function(p){ a += ' L' + X(p.t) + ',' + Y(p.v); });
+        a += ' L' + X(sg[sg.length-1].t) + ',' + Y(0) + ' Z';
+        svg.appendChild(el('path', { 'class':'h-area' + cls, d: a }));
+      }
+      for (var k = 1; k < sg.length; k++){
+        svg.appendChild(el('line', { 'class':'h-line' + cls, x1: X(sg[k-1].t), y1: Y(sg[k-1].v), x2: X(sg[k].t), y2: Y(sg[k].v) }));
+      }
+    });
+
+    /* gap marker + reason */
+    gaps.forEach(function(g){
+      var xm = (X(g.a) + X(g.b)) / 2, y0 = Y(0);
+      svg.appendChild(el('line', { 'class':'h-break', x1: xm - 5, y1: y0 + 6, x2: xm - 1, y2: y0 - 6 }));
+      svg.appendChild(el('line', { 'class':'h-break', x1: xm + 1, y1: y0 + 6, x2: xm + 5, y2: y0 - 6 }));
+      var gt = g.note || 'ไม่มีการบันทึก', parts = [gt];
+      if (gt.length > 14){                                   /* wrap at the space nearest the middle */
+        var best = -1;
+        for (var si = 0; si < gt.length; si++){ if (gt[si] === ' ' && (best < 0 || Math.abs(si - gt.length / 2) < Math.abs(best - gt.length / 2))) best = si; }
+        if (best > 0) parts = [gt.slice(0, best), gt.slice(best + 1)];
+      }
+      parts.forEach(function(txt, k){
+        svg.appendChild(el('text', { 'class':'h-gap', x: xm, y: Y(yMax * 0.82) + k * 15, 'text-anchor':'middle' }, txt));
+      });
+    });
+
+    pts.forEach(function(p, i){
+      var last = i === pts.length - 1;
+      var c = el('circle', { 'class': 'h-dot' + cls + (last ? ' now' : ''), cx: X(p.t), cy: Y(p.v), r: last ? 6 : 4.5 });
+      c.appendChild(el('title', {}, shortDate(p.t) + ': เหลือ ' + n0(p.v) + ' บรรทัด' + (p.note ? ' (' + p.note.replace(/\s*\|\s*/g, ', ') + ')' : '')));
+      svg.appendChild(c);
+      if (p.note && !last && !gapEnd[i]){
+        var lines = p.note.split('|').map(function(s){ return s.trim(); }).filter(Boolean);
+        var nx = X(p.t), anchor = nx > W - 140 ? 'end' : (nx < 120 ? 'start' : 'middle');
+        lines.forEach(function(txt, k){
+          svg.appendChild(el('text', { 'class':'h-note', x: nx, y: Y(p.v) - 12 - (lines.length - 1 - k) * 15, 'text-anchor': anchor }, txt));
+        });
+      }
+      if (last){
+        svg.appendChild(el('text', { 'class':'h-now' + cls, x: X(p.t), y: Y(p.v) + 26, 'text-anchor':'end' }, opt.nowText(p)));
+      }
+    });
+    box.textContent = '';
+    box.appendChild(svg);
+    return gaps.length;
+  }
+  function redrawCharts(){ charts.forEach(function(c){ drawChart(c.box, c.pts, c.opt); }); }
+
+  /* ---------- go ---------- */
+  fetch(SNAP_URL, { cache: 'no-store' })
+    .then(function(r){ if (!r.ok) throw new Error(SNAP_URL + ' not found'); return r.text(); })
+    .then(function(text){
+      var snaps = normalise(toObjects(text));
+      var overall = snaps.filter(function(r){ return r.id === 'overall'; });
+      if (!overall.length) return;
+      var latest = overall[overall.length - 1];
+      var link = '';
+      for (var i = overall.length - 1; i >= 0; i--){ if (overall[i].link){ link = overall[i].link; break; } }
+
+      applyOverall(metrics(latest, overall[overall.length - 2]), latest, link);
+
+      var ids = [];
+      snaps.forEach(function(r){ if (r.id !== 'overall' && ids.indexOf(r.id) < 0) ids.push(r.id); });
+      ids.forEach(function(id){
+        var rows = snaps.filter(function(r){ return r.id === id; });
+        var c = rows[rows.length - 1];
+        if (c.t !== latest.t) return;              /* category not in the newest snapshot */
+        applyCategory(id, c.name, metrics(c, rows[rows.length - 2]), latest.t);
+      });
+
+      if (overall.length >= 2){
+        var tr = overall.map(function(r){ return { t: r.t, v: r.total - r.done, note: r.note }; });
+        charts.push({ box: document.getElementById('history-chart'), pts: tr, opt: {
+          cls: '',
+          aria: function(p){ return 'กราฟจำนวนบรรทัดที่เหลือต้องแปล จาก ' + n0(p[0].v) + ' บรรทัดเมื่อ ' + shortDate(p[0].t) +
+                 ' เหลือ ' + n0(p[p.length-1].v) + ' บรรทัดเมื่อ ' + shortDate(p[p.length-1].t); },
+          nowText: function(p){ return 'ตอนนี้เหลือ ' + n0(p.v) + ' บรรทัด'; } } });
+        document.getElementById('history').hidden = false;
+
+        /* review graph: only the snapshots on the current counting basis, and only once there are 3 of them */
+        var rv = overall.filter(function(r){ return r.basis === latest.basis; })
+                        .map(function(r){ return { t: r.t, v: r.total - r.rev, note: '' }; });
+        if (rv.length >= 3){
+          document.getElementById('history-review').hidden = false;
+          charts.push({ box: document.getElementById('history-review-chart'), pts: rv, opt: {
+            cls: 'review',
+            aria: function(p){ return 'กราฟจำนวนบรรทัดที่เหลือต้องตรวจสอบ จาก ' + n0(p[0].v) + ' บรรทัดเมื่อ ' + shortDate(p[0].t) +
+                   ' เหลือ ' + n0(p[p.length-1].v) + ' บรรทัดเมื่อ ' + shortDate(p[p.length-1].t); },
+            nowText: function(p){ return 'ตอนนี้เหลือ ' + n0(p.v) + ' บรรทัด'; } } });
+        }
+        var hasGap = tr.some(function(p, i){ return i > 0 && p.t - tr[i-1].t > GAP_MS; });
+        if (hasGap){
+          var foot = document.getElementById('history-foot');
+          foot.innerHTML = foot.textContent + '<br>เครื่องหมาย // คือช่วงที่ย่อความยาวบนกราฟ ดูวันที่ที่ปลายทั้งสองด้านของช่วงนั้น';
+        }
+        redrawCharts();
+        var timer = null;
+        window.addEventListener('resize', function(){ clearTimeout(timer); timer = setTimeout(redrawCharts, 120); });
+      }
+      updateRange();
+    })
+    .catch(function(e){ console.warn('pragmata-snapshots.csv could not be loaded, showing static values.', e); });
+})();
+</script>
+
+  <script>
+  (function(){
+    var fulls = [
+      'images/gallery/pragmata-story-full.jpg',
+      'images/gallery/pragmata-cutscene-full.jpg',
+      'images/gallery/pragmata-docs-full.jpg',
+      'images/gallery/pragmata-item-full.jpg',
+      'images/gallery/pragmata-gear-full.jpg',
+      'images/gallery/pragmata-ui-full.jpg'
+    ];
+    var caps = ['เนื้อเรื่อง', 'คัตซีน', 'เอกสาร', 'ไอเทม', 'อุปกรณ์', 'UI/ระบบ'];
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lb-img');
+    var lbCounter = document.getElementById('lb-counter');
+    var current = 0;
+
+    function show(i){
+      current = (i + fulls.length) % fulls.length;
+      lbImg.src = fulls[current];
+      lbCounter.textContent = caps[current] + '  ' + (current + 1) + ' / ' + fulls.length;
+    }
+    function open(i){
+      show(i);
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function close(){
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.gallery-thumb').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        open(parseInt(btn.getAttribute('data-index'), 10));
+      });
+    });
+    document.getElementById('lb-close').addEventListener('click', close);
+    document.getElementById('lb-prev').addEventListener('click', function(){ show(current - 1); });
+    document.getElementById('lb-next').addEventListener('click', function(){ show(current + 1); });
+    lb.addEventListener('click', function(e){ if (e.target === lb) close(); });
+    document.addEventListener('keydown', function(e){
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+  })();
+  </script>
+
+</body>
+</html>

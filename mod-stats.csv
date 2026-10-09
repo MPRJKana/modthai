@@ -1,6 +1,5 @@
-mod_id,mod_name,downloads,version,last_update,link,progress_percent,progress_delta,lines_done,lines_total,lines_delta
-chill,Chill with You: Lo-fi Story,7677,1.17.2,2026-09-19,https://www.nexusmods.com/chillwithyoulofistory/mods/11,,,,,
-spirit,Spirit City: Lofi Sessions,509,2.5.1,2026-09-21,https://www.nexusmods.com/spiritcitylofisessions/mods/18,,,,,
-lm,Little Misfortune,92,1,2025-06-30,https://www.facebook.com/share/p/19Wd52WpW3/,,,,,
-pcbs2,PC Building Simulator 2,2114,1.10,2026-08-19,https://www.nexusmods.com/pcbuildingsimulator2/mods/94,,,,,
-pragmata,Pragmata,,0 (in progress),2026-09-04,https://www.facebook.com/share/p/1DNUyofB97/,74.18,3.36,3888,5241,176
+mod_id,mod_name,downloads,version,last_update,link,progress_percent,progress_delta,lines_done,lines_total,lines_delta,review_percent,review_delta,review_lines_done,review_lines_total,review_lines_delta
+chill,Chill with You: Lo-fi Story,7677,1.17.2,19/9/2026,https://www.nexusmods.com/chillwithyoulofistory/mods/11,,,,,,,,,,
+spirit,Spirit City: Lofi Sessions,509,2.5.1,21/9/2026,https://www.nexusmods.com/spiritcitylofisessions/mods/18,,,,,,,,,,
+lm,Little Misfortune,92,1,30/6/2025,https://www.facebook.com/share/p/19Wd52WpW3/,,,,,,,,,,
+pcbs2,PC Building Simulator 2,2114,1.1,19/8/2026,https://www.nexusmods.com/pcbuildingsimulator2/mods/94,,,,,,,,,,
